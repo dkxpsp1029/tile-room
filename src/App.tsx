@@ -1,17 +1,42 @@
+import { useState } from "react";
+
+import "./App.css";
+
+import HomePage from "./pages/HomePage";
+import RoomPage from "./pages/RoomPage";
+
+type Screen = "home" | "room";
+
+function createRoomCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+
+  for (let i = 0; i < 6; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+
+  return code;
+}
+
 function App() {
-  return (
-    <main>
-      <h1>Tile Room</h1>
+  const [screen, setScreen] = useState<Screen>("home");
+  const [nickname, setNickname] = useState("");
+  const [roomCode, setRoomCode] = useState("");
 
-      <p>친구들과 함께 즐기는 비공개 타일 게임</p>
+  const handleCreateRoom = (name: string) => {
+    setNickname(name);
+    setRoomCode(createRoomCode());
+    setScreen("room");
+  };
 
-      <input placeholder="닉네임을 입력하세요" />
-
-      <div>
-        <button>게임 만들기</button>
-        <button>게임 참가</button>
-      </div>
-    </main>
+  return screen === "room" ? (
+    <RoomPage
+      nickname={nickname}
+      roomCode={roomCode}
+      onBack={() => setScreen("home")}
+    />
+  ) : (
+    <HomePage onCreateRoom={handleCreateRoom} />
   );
 }
 

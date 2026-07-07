@@ -42,6 +42,16 @@ function sortTiles(tiles: LexioTile[]) {
   });
 }
 
+function getPlayerInitial(nickname: string) {
+  const trimmedNickname = nickname.trim();
+
+  if (!trimmedNickname) {
+    return "?";
+  }
+
+  return trimmedNickname.slice(0, 1).toUpperCase();
+}
+
 function playBeep(type: "tile" | "turn" | "victory" | "start") {
   try {
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -109,6 +119,10 @@ export default function GamePage({
 
   const currentTurnPlayer = room?.players.find(
     (player) => player.id === room.game?.currentTurnPlayerId
+  );
+
+  const lastPlayedPlayer = room?.players.find(
+    (player) => player.id === room.game?.lastPlayedPlayerId
   );
 
   const currentTurnPlayerId = room?.game?.currentTurnPlayerId;
@@ -383,6 +397,29 @@ export default function GamePage({
     }
   };
 
+  const opponentPlayers = (room?.players ?? []).filter((player) => player.id !== playerId);
+  const opponentCount = opponentPlayers.length;
+
+  const renderSeatCard = (player: RoomData["players"][number], index: number) => {
+    const isActiveTurn = !isGameFinished && player.id === currentTurnPlayerId;
+
+    return (
+      <div
+        className={`seat-card seat-${index + 1}${isActiveTurn ? " active-turn" : ""}`}
+        key={player.id}
+      >
+        <div className="seat-avatar">{getPlayerInitial(player.nickname)}</div>
+
+        <div className="seat-info">
+          <span className="seat-name">{player.nickname}</span>
+          <strong>{player.tiles?.length ?? 0}장</strong>
+          <em>{player.chipScore ?? 64}칩</em>
+          {isActiveTurn && <b>▶ TURN</b>}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="lexio-screen">
       <header className="lexio-header">
@@ -407,105 +444,126 @@ export default function GamePage({
         </div>
       </header>
 
-      <section className="opponent-area">
-        <div className="opponent-list">
-          {room?.players.map((player) => {
-            const isMe = player.id === playerId;
-            const isActiveTurn = !isGameFinished && player.id === currentTurnPlayerId;
+      <main className={`board-layout opponents-${opponentCount}`}>
+        <section className="board-table-zone">
+          <div className="board-opponents">
+            {opponentPlayers.map((player, index) => renderSeatCard(player, index))}
+          </div>
 
-            return (
-              <div
-                className={`opponent-card${isMe ? " me" : ""}${isActiveTurn ? " active-turn" : ""}`}
-                key={player.id}
-              >
-                <span>
-                  {player.nickname}
-                  {isMe ? " (ME)" : ""}
+          <section className="table-area board-center">
+            <div className="table-title">LAST PLAY</div>
+
+            {tableTiles.length > 0 && lastPlayedPlayer && (
+              <div className="last-play-owner">
+                <span className="last-play-avatar">
+                  {getPlayerInitial(lastPlayedPlayer.nickname)}
                 </span>
-                <strong>{player.tiles?.length ?? 0}장 · {player.chipScore ?? 64}칩</strong>
+                <strong>
+                  {lastPlayedPlayer.id === playerId
+                    ? "내가"
+                    : `${lastPlayedPlayer.nickname}님이`}
+                </strong>
+                <em> 냈습니다</em>
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="table-area">
-        {tableTiles.length === 0 ? (
-          <span className="table-placeholder">여기에 패가 제출됩니다</span>
-        ) : (
-          tableTiles.map((tile) => (
-            <div className={`lexio-tile suit-${tile.suit}`} key={tile.id}>
-              <div className="tile-suit">{suitSymbols[tile.suit]}</div>
-              <div className="tile-number">{tile.number}</div>
-              <div className="tile-suit">{suitSymbols[tile.suit]}</div>
-            </div>
-          ))
-        )}
-      </section>
-
-      {!isGameFinished && (
-        <>
-          <section className="selected-combo-panel">
-            {selectedTileIds.length === 0 ? (
-              <span>선택한 패 없음</span>
-            ) : selectedCombo ? (
-              <span className={selectedValidation?.ok ? "combo-valid" : "combo-invalid"}>
-                선택 조합: {getComboLabel(selectedCombo.type)}
-                {selectedValidation?.ok ? " · 제출 가능" : ` · ${selectedComboError ?? "제출 불가"}`}
-              </span>
-            ) : (
-              <span className="combo-invalid">
-                INVALID · {selectedComboError ?? "유효하지 않은 조합입니다."}
-              </span>
             )}
+
+            <div className="table-tiles">
+              {tableTiles.length === 0 ? (
+                <span className="table-placeholder">여기에 패가 제출됩니다</span>
+              ) : (
+                tableTiles.map((tile) => (
+                  <div className={`lexio-tile suit-${tile.suit}`} key={tile.id}>
+                    <div className="tile-suit">{suitSymbols[tile.suit]}</div>
+                    <div className="tile-number">{tile.number}</div>
+                    <div className="tile-suit">{suitSymbols[tile.suit]}</div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="table-combo-label">
+              {room?.game?.currentCombo
+                ? getComboLabel(room.game.currentCombo.type)
+                : "새 판 시작"}
+            </div>
           </section>
+        </section>
 
-          <section className="game-controls">
-            <button
-              className="lexio-button primary"
-              disabled={!canAct || !canSubmitSelectedCombo}
-              onClick={handleSubmitTiles}
-            >
-              패 내기
-            </button>
+        {!isGameFinished && (
+          <>
+            <section className="selected-combo-panel">
+              {selectedTileIds.length === 0 ? (
+                <span>선택한 패 없음</span>
+              ) : selectedCombo ? (
+                <span className={selectedValidation?.ok ? "combo-valid" : "combo-invalid"}>
+                  선택 조합: {getComboLabel(selectedCombo.type)}
+                  {selectedValidation?.ok ? " · 제출 가능" : ` · ${selectedComboError ?? "제출 불가"}`}
+                </span>
+              ) : (
+                <span className="combo-invalid">
+                  INVALID · {selectedComboError ?? "유효하지 않은 조합입니다."}
+                </span>
+              )}
+            </section>
 
-            <button
-              className="lexio-button secondary"
-              disabled={!canAct}
-              onClick={handlePass}
-            >
-              PASS
-            </button>
-          </section>
-        </>
-      )}
+            <section className="game-controls">
+              <button
+                className="lexio-button primary"
+                disabled={!canAct || !canSubmitSelectedCombo}
+                onClick={handleSubmitTiles}
+              >
+                패 내기
+              </button>
 
-      <section className="player-hand-container">
-        <div className="player-hand">
-          {myTiles.length === 0 ? (
-            <p className="empty-hand">남은 타일 없음</p>
-          ) : (
-            myTiles.map((tile) => {
-              const isSelected = selectedTileIds.includes(tile.id);
+              <button
+                className="lexio-button secondary"
+                disabled={!canAct}
+                onClick={handlePass}
+              >
+                PASS
+              </button>
+            </section>
+          </>
+        )}
 
-              return (
-                <button
-                  className={`lexio-tile suit-${tile.suit} ${
-                    isSelected ? "selected" : ""
-                  }`}
-                  disabled={!canAct}
-                  key={tile.id}
-                  onClick={() => toggleTile(tile.id)}
-                >
-                  <div className="tile-suit">{suitSymbols[tile.suit]}</div>
-                  <div className="tile-number">{tile.number}</div>
-                  <div className="tile-suit">{suitSymbols[tile.suit]}</div>
-                </button>
-              );
-            })
-          )}
-        </div>
-      </section>
+        <section className="player-hand-container">
+          <div className={isMyTurn && !isGameFinished ? "my-player-card active-turn" : "my-player-card"}>
+            <div className="seat-avatar my-avatar">{getPlayerInitial(nickname)}</div>
+
+            <div className="seat-info">
+              <span>{nickname}</span>
+              <strong>{myTiles.length}장</strong>
+              <em>{currentPlayer?.chipScore ?? 64}칩</em>
+              {isMyTurn && !isGameFinished && <b>내 차례</b>}
+            </div>
+          </div>
+
+          <div className="player-hand">
+            {myTiles.length === 0 ? (
+              <p className="empty-hand">남은 타일 없음</p>
+            ) : (
+              myTiles.map((tile) => {
+                const isSelected = selectedTileIds.includes(tile.id);
+
+                return (
+                  <button
+                    className={`lexio-tile suit-${tile.suit} ${
+                      isSelected ? "selected" : ""
+                    }`}
+                    disabled={!canAct}
+                    key={tile.id}
+                    onClick={() => toggleTile(tile.id)}
+                  >
+                    <div className="tile-suit">{suitSymbols[tile.suit]}</div>
+                    <div className="tile-number">{tile.number}</div>
+                    <div className="tile-suit">{suitSymbols[tile.suit]}</div>
+                  </button>
+                );
+              })
+            )}
+          </div>
+        </section>
+      </main>
 
       {showWinnerSplash && isGameFinished && (
         <div className="winner-splash">

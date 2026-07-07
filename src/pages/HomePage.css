@@ -28,6 +28,7 @@
     inset 0 0 40px rgba(79, 124, 255, 0.25);
   font-family: "Press Start 2P", "Noto Sans KR", monospace;
   text-align: center;
+  overflow: hidden;
 }
 
 .home-panel::before {
@@ -36,11 +37,14 @@
   inset: 18px;
   border: 2px dashed rgba(167, 139, 250, 0.45);
   pointer-events: none;
+  max-width: calc(100% - 36px);
 }
 
 .home-stars {
   position: absolute;
   inset: 0;
+  width: 100%;
+  overflow: hidden;
   background-image:
     radial-gradient(#fff 1px, transparent 1px),
     radial-gradient(#22d3ee 1px, transparent 1px),
@@ -97,6 +101,9 @@
   color: #a855f7;
   font-size: 18px;
   letter-spacing: 7px;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .home-input-label {
@@ -222,12 +229,13 @@
     opacity: 0.35;
   }
 }
-/* v0.7 responsive home patch */
+
 @media (max-width: 720px) {
   .home-screen {
     min-height: 100dvh;
     align-items: stretch;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
   }
 
@@ -237,6 +245,7 @@
     margin: auto 0;
     padding: 18px 14px 16px;
     border-width: 3px;
+    overflow: hidden;
     box-shadow:
       0 0 0 4px #10172f,
       0 0 22px rgba(79, 124, 255, 0.48),
@@ -245,6 +254,7 @@
 
   .home-panel::before {
     inset: 10px;
+    max-width: calc(100% - 20px);
   }
 
   .home-hud {
@@ -266,14 +276,14 @@
     margin-top: 14px;
     font-size: 11px;
     letter-spacing: 1px;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .home-divider {
     margin: 14px 0 10px;
     font-size: 11px;
     letter-spacing: 3px;
-    overflow: hidden;
-    white-space: nowrap;
   }
 
   .home-input-label {

@@ -927,3 +927,572 @@
     font-size: 13px;
   }
 }
+
+/* v0.8 board-centered table layout */
+.board-layout {
+  width: min(1180px, 96vw);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.board-table-zone {
+  position: relative;
+  width: min(980px, 94vw);
+  height: clamp(300px, 42vh, 430px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-opponents {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.seat-card,
+.my-player-card {
+  min-width: 148px;
+  padding: 11px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    rgba(22, 33, 62, 0.9);
+  border-radius: 14px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 10px;
+  align-items: center;
+  font-weight: 900;
+}
+
+.seat-card {
+  position: absolute;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.seat-name,
+.my-player-card span {
+  color: #fff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seat-card strong,
+.my-player-card strong {
+  color: #ffdd57;
+}
+
+.seat-card em,
+.my-player-card em {
+  color: rgba(255, 255, 255, 0.64);
+  font-style: normal;
+  font-size: 12px;
+}
+
+.seat-card b,
+.my-player-card b {
+  grid-column: 1 / -1;
+  color: #7cff9b;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.seat-card.active-turn,
+.my-player-card:has(b) {
+  border-color: #ffdd57;
+  box-shadow:
+    0 0 22px rgba(255, 221, 87, 0.42),
+    0 12px 24px rgba(0, 0, 0, 0.34);
+}
+
+.opponents-2 .seat-1 {
+  top: 12%;
+  left: 32%;
+}
+
+.opponents-2 .seat-2 {
+  top: 12%;
+  left: 68%;
+}
+
+.opponents-3 .seat-1 {
+  top: 10%;
+  left: 50%;
+}
+
+.opponents-3 .seat-2 {
+  top: 50%;
+  left: 10%;
+}
+
+.opponents-3 .seat-3 {
+  top: 50%;
+  left: 90%;
+}
+
+.opponents-4 .seat-1 {
+  top: 12%;
+  left: 32%;
+}
+
+.opponents-4 .seat-2 {
+  top: 12%;
+  left: 68%;
+}
+
+.opponents-4 .seat-3 {
+  top: 54%;
+  left: 9%;
+}
+
+.opponents-4 .seat-4 {
+  top: 54%;
+  left: 91%;
+}
+
+.board-center.table-area {
+  width: min(470px, 52vw);
+  height: min(230px, 26vh);
+  min-height: 188px;
+  flex-direction: column;
+  gap: 10px;
+  border: 2px solid rgba(103, 232, 249, 0.34);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(103, 232, 249, 0.12), transparent 38%),
+    var(--lexio-panel);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.58),
+    0 18px 42px rgba(0, 0, 0, 0.38),
+    0 0 22px rgba(103, 232, 249, 0.12);
+}
+
+.table-title {
+  color: rgba(255, 255, 255, 0.52);
+  font-family: "Press Start 2P", monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.table-tiles {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.table-combo-label {
+  min-height: 22px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffdd57;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.board-layout .selected-combo-panel {
+  margin: 0;
+}
+
+.board-layout .game-controls {
+  margin-bottom: 2px;
+}
+
+.board-layout .player-hand-container {
+  width: min(1120px, 100vw);
+  padding: 12px 0 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.my-player-card {
+  min-width: min(360px, 86vw);
+  grid-template-columns: 1fr auto auto;
+}
+
+.my-player-card b {
+  grid-column: auto;
+  justify-self: end;
+}
+
+@media (max-width: 900px) {
+  .board-table-zone {
+    height: 350px;
+  }
+
+  .seat-card {
+    min-width: 128px;
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+
+  .board-center.table-area {
+    width: min(420px, 58vw);
+  }
+}
+
+@media (max-width: 720px) {
+  .board-layout {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .board-table-zone {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .board-opponents {
+    position: static;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    order: 1;
+  }
+
+  .seat-card,
+  .opponents-2 .seat-1,
+  .opponents-2 .seat-2,
+  .opponents-3 .seat-1,
+  .opponents-3 .seat-2,
+  .opponents-3 .seat-3,
+  .opponents-4 .seat-1,
+  .opponents-4 .seat-2,
+  .opponents-4 .seat-3,
+  .opponents-4 .seat-4 {
+    position: static;
+    transform: none;
+    min-width: 0;
+    width: auto;
+    padding: 8px 9px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+
+  .opponents-3 .board-opponents,
+  .opponents-4 .board-opponents {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .board-center.table-area {
+    order: 2;
+    width: 100%;
+    height: 138px;
+    min-height: 138px;
+    border-radius: 14px;
+    gap: 4px;
+  }
+
+  .table-title {
+    font-size: 8px;
+  }
+
+  .table-tiles {
+    min-height: 74px;
+    gap: 6px;
+  }
+
+  .table-combo-label {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .my-player-card {
+    min-width: min(330px, 92vw);
+    grid-template-columns: 1fr auto auto;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+}
+
+/* v0.9 circular player seats + last play owner */
+.seat-card,
+.my-player-card {
+  width: 132px;
+  height: 132px;
+  min-width: 132px;
+  padding: 12px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.16), transparent 36%),
+    radial-gradient(circle at 50% 100%, rgba(103, 232, 249, 0.14), transparent 52%),
+    rgba(8, 15, 34, 0.92);
+  border: 2px solid rgba(103, 232, 249, 0.45);
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(103, 232, 249, 0.22),
+    0 14px 28px rgba(0, 0, 0, 0.38);
+}
+
+.seat-card:nth-child(2n) {
+  border-color: rgba(190, 120, 255, 0.58);
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(190, 120, 255, 0.24),
+    0 14px 28px rgba(0, 0, 0, 0.38);
+}
+
+.seat-card:nth-child(3n) {
+  border-color: rgba(124, 255, 155, 0.58);
+  box-shadow:
+    inset 0 0 20px rgba(0, 0, 0, 0.35),
+    0 0 18px rgba(124, 255, 155, 0.22),
+    0 14px 28px rgba(0, 0, 0, 0.38);
+}
+
+.seat-card.active-turn,
+.my-player-card.active-turn,
+.my-player-card:has(b) {
+  border-color: #ffdd57;
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.32),
+    0 0 28px rgba(255, 221, 87, 0.62),
+    0 0 58px rgba(255, 221, 87, 0.22),
+    0 16px 30px rgba(0, 0, 0, 0.44);
+}
+
+.my-player-card.active-turn,
+.my-player-card:has(b) {
+  transform: scale(1.04);
+}
+
+.seat-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.36), transparent 42%),
+    linear-gradient(145deg, #243b80, #11192f);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  font-size: 18px;
+  font-weight: 900;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.my-avatar {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.42), transparent 42%),
+    linear-gradient(145deg, #ffd84d, #9a5a00);
+  color: #111827;
+}
+
+.seat-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.1;
+}
+
+.seat-name,
+.my-player-card span {
+  max-width: 96px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seat-card strong,
+.my-player-card strong {
+  color: #ffdd57;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.seat-card em,
+.my-player-card em {
+  color: rgba(103, 232, 249, 0.88);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.seat-card b,
+.my-player-card b {
+  color: #7cff9b;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.7px;
+}
+
+.last-play-owner {
+  max-width: min(92%, 340px);
+  margin-top: -2px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+}
+
+.last-play-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, #263d83, #11192f);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.last-play-owner strong {
+  color: #67e8f9;
+}
+
+.last-play-owner em {
+  color: rgba(255, 255, 255, 0.72);
+  font-style: normal;
+}
+
+.board-center.table-area {
+  border-radius: 34px;
+}
+
+.board-layout .player-hand-container {
+  gap: 12px;
+}
+
+@media (max-width: 900px) {
+  .seat-card,
+  .my-player-card {
+    width: 116px;
+    height: 116px;
+    min-width: 116px;
+    padding: 10px;
+  }
+
+  .seat-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+
+  .seat-name,
+  .my-player-card span {
+    max-width: 82px;
+    font-size: 13px;
+  }
+
+  .seat-card strong,
+  .my-player-card strong {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 720px) {
+  .seat-card,
+  .my-player-card,
+  .opponents-2 .seat-1,
+  .opponents-2 .seat-2,
+  .opponents-3 .seat-1,
+  .opponents-3 .seat-2,
+  .opponents-3 .seat-3,
+  .opponents-4 .seat-1,
+  .opponents-4 .seat-2,
+  .opponents-4 .seat-3,
+  .opponents-4 .seat-4 {
+    width: min(106px, 42vw);
+    height: min(106px, 42vw);
+    min-width: 0;
+    margin: 0 auto;
+    padding: 8px;
+    border-radius: 999px;
+  }
+
+  .seat-card.active-turn,
+  .my-player-card.active-turn,
+  .my-player-card:has(b) {
+    transform: none;
+  }
+
+  .seat-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+
+  .seat-name,
+  .my-player-card span {
+    max-width: 74px;
+    font-size: 12px;
+  }
+
+  .seat-card strong,
+  .my-player-card strong {
+    font-size: 13px;
+  }
+
+  .seat-card em,
+  .my-player-card em {
+    font-size: 10px;
+  }
+
+  .seat-card b,
+  .my-player-card b {
+    font-size: 9px;
+  }
+
+  .last-play-owner {
+    padding: 5px 9px;
+    font-size: 11px;
+  }
+
+  .last-play-avatar {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+
+  .board-center.table-area {
+    border-radius: 18px;
+  }
+}

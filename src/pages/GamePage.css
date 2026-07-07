@@ -673,3 +673,257 @@
 .chip-minus {
   color: #ff7a8a !important;
 }
+
+/* v0.7 responsive game patch */
+@media (max-width: 720px) {
+  .lexio-screen {
+    min-height: 100dvh;
+    height: auto;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: max(10px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom));
+  }
+
+  .lexio-header {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  .lexio-header h1 {
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    text-shadow: 3px 3px 0 #000;
+  }
+
+  .lexio-header p {
+    font-size: 11px;
+  }
+
+  .game-leave-button {
+    margin-top: 7px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .turn-banner {
+    margin-top: 8px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .opponent-area {
+    width: 100%;
+  }
+
+  .opponent-list {
+    gap: 7px;
+  }
+
+  .opponent-card {
+    min-width: 0;
+    flex: 1 1 calc(50% - 8px);
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .opponent-card span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .table-area {
+    width: 100%;
+    height: 136px;
+    min-height: 136px;
+    border-radius: 12px;
+    gap: 6px;
+    padding: 8px;
+    box-sizing: border-box;
+    overflow-x: auto;
+  }
+
+  .table-placeholder {
+    font-size: 12px;
+  }
+
+  .selected-combo-panel {
+    min-height: 24px;
+    margin: 0;
+    font-size: 12px;
+    padding: 0 6px;
+  }
+
+  .game-controls {
+    width: 100%;
+    gap: 8px;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+
+  .lexio-button {
+    flex: 1;
+    padding: 11px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .player-hand-container {
+    width: calc(100% + 16px);
+    margin: 0 -8px;
+    padding: 12px 0 max(14px, env(safe-area-inset-bottom));
+    position: sticky;
+    bottom: 0;
+  }
+
+  .player-hand {
+    max-width: 100%;
+    gap: 6px;
+    padding: 20px 10px 12px;
+  }
+
+  .lexio-tile {
+    width: 44px;
+    height: 68px;
+    border-radius: 7px;
+    padding: 6px 3px;
+  }
+
+  .lexio-tile.suit-sun,
+  .lexio-tile.suit-moon,
+  .lexio-tile.suit-star,
+  .lexio-tile.suit-cloud {
+    border-width: 2px;
+  }
+
+  .tile-suit {
+    font-size: 12px;
+  }
+
+  .tile-number {
+    font-size: 19px;
+  }
+
+  .player-hand .lexio-tile.selected,
+  .player-hand .lexio-tile.selected:hover:not(:disabled) {
+    transform: translateY(-16px);
+  }
+
+  .player-hand .lexio-tile:hover:not(:disabled) {
+    transform: translateY(-8px);
+  }
+
+  .winner-splash div {
+    width: min(92vw, 420px);
+    padding: 28px 18px;
+  }
+
+  .winner-splash span {
+    font-size: 15px;
+  }
+
+  .game-over-backdrop {
+    align-items: flex-start;
+    padding: max(12px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
+    overflow-y: auto;
+  }
+
+  .game-over-modal {
+    width: 100%;
+    max-height: none;
+    padding: 22px 14px 18px;
+    border-radius: 14px;
+  }
+
+  .game-over-kicker {
+    font-size: 10px;
+  }
+
+  .game-over-modal h2 {
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+
+  .winner-box {
+    margin-bottom: 14px;
+    padding: 12px;
+  }
+
+  .winner-box strong {
+    font-size: 22px;
+  }
+
+  .ranking-row,
+  .replay-ready-row,
+  .score-ranking-row {
+    padding: 8px 9px;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .ranking-row {
+    grid-template-columns: 42px 1fr 52px;
+  }
+
+  .score-ranking-row {
+    grid-template-columns: 1fr 58px 54px;
+  }
+
+  .score-summary-box,
+  .replay-ready-box {
+    margin: 14px 0;
+    padding: 10px;
+  }
+
+  .score-summary-title,
+  .replay-ready-title {
+    font-size: 12px;
+  }
+
+  .settlement-list {
+    max-height: 96px;
+  }
+
+  .settlement-list p {
+    font-size: 11px;
+  }
+
+  .restart-button {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .countdown-box strong {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 380px) {
+  .lexio-header h1 {
+    font-size: 14px;
+  }
+
+  .table-area {
+    height: 120px;
+    min-height: 120px;
+  }
+
+  .lexio-tile {
+    width: 40px;
+    height: 62px;
+  }
+
+  .tile-number {
+    font-size: 17px;
+  }
+
+  .lexio-button {
+    font-size: 13px;
+  }
+}

@@ -246,3 +246,114 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* v0.7 responsive room patch */
+@media (max-width: 720px) {
+  .room-screen {
+    min-height: 100dvh;
+    align-items: stretch;
+    overflow-y: auto;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(14px, env(safe-area-inset-bottom));
+  }
+
+  .room-panel {
+    width: 100%;
+    min-height: auto;
+    margin: auto 0;
+    padding: 18px 14px 18px;
+    border-width: 3px;
+    box-shadow:
+      0 0 0 4px #10172f,
+      0 0 22px rgba(79, 124, 255, 0.45),
+      inset 0 0 28px rgba(79, 124, 255, 0.18);
+  }
+
+  .room-panel::before {
+    inset: 10px;
+  }
+
+  .room-header {
+    margin-bottom: 24px;
+    gap: 8px;
+    font-size: 9px;
+    flex-wrap: wrap;
+  }
+
+  .room-header button,
+  .leave-button {
+    font-size: 8px;
+    padding: 7px 8px;
+    box-shadow: 3px 3px 0 #000;
+  }
+
+  .room-title {
+    font-size: 24px;
+    margin-bottom: 18px;
+    text-shadow:
+      2px 2px 0 #8a4f00,
+      4px 4px 0 #2a1600,
+      0 0 14px rgba(255, 216, 74, 0.7);
+  }
+
+  .room-code-box {
+    margin-bottom: 18px;
+  }
+
+  .room-code-box p {
+    font-size: 10px;
+    margin-bottom: 8px;
+  }
+
+  .room-code {
+    padding: 12px 18px;
+    border-width: 3px;
+    font-size: 22px;
+    letter-spacing: 4px;
+    box-shadow:
+      4px 4px 0 #270a47,
+      0 0 16px rgba(168, 85, 247, 0.5);
+  }
+
+  .room-code-box small {
+    font-size: 12px;
+  }
+
+  .player-box {
+    width: 100%;
+    margin-top: 18px;
+  }
+
+  .player-box h3 {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .player-box li {
+    min-height: 42px;
+    margin-bottom: 8px;
+    padding: 0 12px;
+    border-left-width: 4px;
+    font-size: 14px;
+    box-shadow: 4px 4px 0 #000;
+  }
+
+  .player-box li strong {
+    font-size: 10px;
+  }
+
+  .start-button,
+  .ready-button {
+    width: 100%;
+    min-height: 56px;
+    margin-top: 18px;
+    border-width: 3px;
+    font-size: 14px;
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .room-waiting-message,
+  .room-current-player {
+    margin-top: 14px;
+    font-size: 12px;
+  }
+}

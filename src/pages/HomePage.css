@@ -222,3 +222,122 @@
     opacity: 0.35;
   }
 }
+/* v0.7 responsive home patch */
+@media (max-width: 720px) {
+  .home-screen {
+    min-height: 100dvh;
+    align-items: stretch;
+    overflow-y: auto;
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  }
+
+  .home-panel {
+    width: 100%;
+    min-height: auto;
+    margin: auto 0;
+    padding: 18px 14px 16px;
+    border-width: 3px;
+    box-shadow:
+      0 0 0 4px #10172f,
+      0 0 22px rgba(79, 124, 255, 0.48),
+      inset 0 0 28px rgba(79, 124, 255, 0.18);
+  }
+
+  .home-panel::before {
+    inset: 10px;
+  }
+
+  .home-hud {
+    font-size: 9px;
+    letter-spacing: 1px;
+    margin-bottom: 28px;
+  }
+
+  .home-title {
+    font-size: clamp(34px, 13vw, 54px);
+    letter-spacing: 3px;
+    text-shadow:
+      3px 3px 0 #8a4f00,
+      6px 6px 0 #2a1600,
+      0 0 16px rgba(255, 216, 74, 0.7);
+  }
+
+  .home-start-text {
+    margin-top: 14px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .home-divider {
+    margin: 14px 0 10px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .home-input-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 10px 0 6px;
+  }
+
+  .home-nickname-input {
+    width: min(100%, 420px);
+    padding: 10px 12px;
+    border-width: 3px;
+    font-size: 15px;
+    box-shadow:
+      4px 4px 0 #270a47,
+      0 0 16px rgba(168, 85, 247, 0.46);
+  }
+
+  .home-button-stack {
+    width: min(100%, 420px);
+    margin-top: 16px;
+    gap: 10px;
+  }
+
+  .home-pixel-button {
+    min-height: 56px;
+    border-width: 3px;
+    gap: 10px;
+    font-size: 18px;
+    box-shadow: 5px 5px 0 #000;
+  }
+
+  .home-pixel-button small {
+    margin-top: 2px;
+    font-size: 8px;
+    letter-spacing: 1px;
+  }
+
+  .home-button-icon {
+    font-size: 22px;
+  }
+
+  .home-footer-text {
+    margin-top: 14px;
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 380px) {
+  .home-panel {
+    padding: 14px 10px;
+  }
+
+  .home-hud {
+    margin-bottom: 20px;
+  }
+
+  .home-title {
+    font-size: 32px;
+  }
+
+  .home-pixel-button {
+    min-height: 52px;
+    font-size: 16px;
+  }
+}

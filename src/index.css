@@ -109,3 +109,26 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* v0.7 responsive base patch */
+html,
+body,
+#root {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100dvh;
+  background: #050711;
+}
+
+#root {
+  border-inline: 0;
+}
+
+button,
+input {
+  max-width: 100%;
+}

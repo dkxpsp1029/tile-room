@@ -3,20 +3,39 @@ import "./HomePage.css";
 
 type HomePageProps = {
   onCreateRoom: (nickname: string) => void;
+  onJoinRoom: (nickname: string, roomCode: string) => void;
 };
 
-export default function HomePage({ onCreateRoom }: HomePageProps) {
+export default function HomePage({ onCreateRoom, onJoinRoom }: HomePageProps) {
   const [nickname, setNickname] = useState("");
+  const [roomCode, setRoomCode] = useState("");
 
   const handleCreateRoom = () => {
-    const trimmedNickname = nickname.trim();
+    const name = nickname.trim();
 
-    if (!trimmedNickname) {
+    if (!name) {
       alert("닉네임을 입력해주세요.");
       return;
     }
 
-    onCreateRoom(trimmedNickname);
+    onCreateRoom(name);
+  };
+
+  const handleJoinRoom = () => {
+    const name = nickname.trim();
+    const code = roomCode.trim().toUpperCase();
+
+    if (!name) {
+      alert("닉네임을 입력해주세요.");
+      return;
+    }
+
+    if (!code) {
+      alert("방 코드를 입력해주세요.");
+      return;
+    }
+
+    onJoinRoom(name, code);
   };
 
   return (
@@ -36,12 +55,19 @@ export default function HomePage({ onCreateRoom }: HomePageProps) {
         <div className="home-divider">·······························</div>
 
         <label className="home-input-label">NICKNAME</label>
-
         <input
           className="home-nickname-input"
           placeholder="닉네임을 입력하세요"
           value={nickname}
           onChange={(event) => setNickname(event.target.value)}
+        />
+
+        <label className="home-input-label">ROOM CODE</label>
+        <input
+          className="home-nickname-input"
+          placeholder="참가할 방 코드를 입력하세요"
+          value={roomCode}
+          onChange={(event) => setRoomCode(event.target.value.toUpperCase())}
         />
 
         <div className="home-button-stack">
@@ -58,7 +84,7 @@ export default function HomePage({ onCreateRoom }: HomePageProps) {
 
           <button
             className="home-pixel-button home-join-button"
-            onClick={() => alert("게임 참가 기능은 다음 단계에서 만들 예정입니다.")}
+            onClick={handleJoinRoom}
           >
             <span className="home-button-icon">👥</span>
             <span>

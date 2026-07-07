@@ -29,16 +29,31 @@ const suitSymbols = {
   cloud: "☁",
 };
 
+const lexioNumberOrder = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 2];
+const suitOrder: Record<LexioTile["suit"], number> = {
+  cloud: 0,
+  star: 1,
+  moon: 2,
+  sun: 3,
+};
+
+function getNumberOrder(number: number) {
+  const index = lexioNumberOrder.indexOf(number);
+  return index === -1 ? 999 : index;
+}
+
 const REPLAY_COUNTDOWN_MS = 3000;
 const WINNER_SPLASH_MS = 1200;
 
 function sortTiles(tiles: LexioTile[]) {
   return [...tiles].sort((a, b) => {
-    if (a.number !== b.number) {
-      return a.number - b.number;
+    const numberDiff = getNumberOrder(a.number) - getNumberOrder(b.number);
+
+    if (numberDiff !== 0) {
+      return numberDiff;
     }
 
-    return a.suit.localeCompare(b.suit);
+    return suitOrder[a.suit] - suitOrder[b.suit];
   });
 }
 
@@ -102,6 +117,7 @@ export default function GamePage({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countdownValue, setCountdownValue] = useState<number | null>(null);
   const [showWinnerSplash, setShowWinnerSplash] = useState(false);
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
 
   const previousTurnPlayerIdRef = useRef<string | null>(null);
   const previousTableTileIdsRef = useRef<string>("");
@@ -173,7 +189,7 @@ export default function GamePage({
   const canAct = isMyTurn && room?.status === "playing" && !isSubmitting;
 
   const myTiles = sortTiles(currentPlayer?.tiles ?? []);
-  const tableTiles = room?.game?.tableTiles ?? [];
+  const tableTiles = sortTiles(room?.game?.tableTiles ?? []);
   const selectedTiles = myTiles.filter((tile) => selectedTileIds.includes(tile.id));
   const selectedCombo = selectedTiles.length > 0 ? analyzeCombo(selectedTiles) : null;
   const selectedValidation = selectedTiles.length > 0
@@ -235,6 +251,24 @@ export default function GamePage({
     previousTurnPlayerIdRef.current = room.game.currentTurnPlayerId;
     previousStatusRef.current = room.status;
   }, [room]);
+
+  useEffect(() => {
+    if (!isGuideOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsGuideOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isGuideOpen]);
 
   useEffect(() => {
     if (!isGameFinished || !replayCountdownStartedAt || !allReplayReady) {
@@ -428,13 +462,24 @@ export default function GamePage({
           ROOM {roomCode} · {nickname}
         </p>
 
-        <button
-          className="game-leave-button"
-          disabled={isSubmitting}
-          onClick={handleLeaveRoom}
-        >
-          방 나가기
-        </button>
+        <div className="header-action-row">
+          <button
+            className="game-leave-button"
+            disabled={isSubmitting}
+            onClick={handleLeaveRoom}
+          >
+            방 나가기
+          </button>
+
+          <button
+            className="guide-button"
+            aria-label="렉시오 조합 설명서 열기"
+            onClick={() => setIsGuideOpen(true)}
+            type="button"
+          >
+            ?
+          </button>
+        </div>
 
         <div className={isMyTurn ? "turn-banner my-turn" : "turn-banner"}>
           {isGameFinished
@@ -443,6 +488,68 @@ export default function GamePage({
           {!isGameFinished && isMyTurn ? " · 내 차례" : ""}
         </div>
       </header>
+
+      {isGuideOpen && (
+        <div className="guide-backdrop" onClick={() => setIsGuideOpen(false)}>
+          <aside className="guide-panel" onClick={(event) => event.stopPropagation()}>
+            <div className="guide-panel-header">
+              <div>
+                <span>LEXIO GUIDE</span>
+                <strong>조합 설명서</strong>
+              </div>
+
+              <button
+                className="guide-close-button"
+                aria-label="렉시오 조합 설명서 닫기"
+                onClick={() => setIsGuideOpen(false)}
+                type="button"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="guide-section">
+              <h3>기본 조합</h3>
+              <p><b>싱글</b><span>타일 1장</span></p>
+              <p><b>페어</b><span>같은 숫자 2장</span></p>
+              <p><b>트리플</b><span>같은 숫자 3장</span></p>
+            </div>
+
+            <div className="guide-section">
+              <h3>5장 조합 순위</h3>
+              <ol>
+                <li><b>스트레이트</b><span>연속 숫자 5장</span></li>
+                <li><b>플러쉬</b><span>같은 문양 5장</span></li>
+                <li><b>풀하우스</b><span>트리플 + 페어</span></li>
+                <li><b>포카드</b><span>같은 숫자 4장 + 1장</span></li>
+                <li><b>스트레이트 플러쉬</b><span>같은 문양 연속 5장</span></li>
+              </ol>
+            </div>
+
+            <div className="guide-section">
+              <h3>숫자 순서</h3>
+              <div className="guide-order-list">
+                {lexioNumberOrder.map((number) => (
+                  <span key={number}>{number}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className="guide-section">
+              <h3>문양 순서</h3>
+              <div className="guide-suit-order">
+                <span>☁ 구름</span>
+                <em>&lt;</em>
+                <span>★ 별</span>
+                <em>&lt;</em>
+                <span>🌙 달</span>
+                <em>&lt;</em>
+                <span>☀ 해</span>
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
 
       <main className={`board-layout opponents-${opponentCount}`}>
         <section className="board-table-zone">
